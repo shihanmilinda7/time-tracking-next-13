@@ -10,7 +10,7 @@ export default function TimeAllocation() {
   const [remark, setRemark] = useState("");
   let userIdTmp = ""
   try {
-    userIdTmp = localStorage.getItem('userid');
+    userIdTmp = localStorage.getItem('userid') || "";
   } catch (error) { }
   const [userid, setUserId] = useState(userIdTmp);
   // const childRef = useRef(null);

@@ -29,9 +29,9 @@ export default function TimeAllocation1() {
   let userIdTmp;
 
   try {
-    userIdTmp = localStorage.getItem('userid');
+    userIdTmp = localStorage.getItem('userid') || "";
   } catch (error) { }
-  const [userid, setUserId] = useState(localStorage.getItem('userid'));
+  const [userid, setUserId] = useState(userIdTmp);
 
   // const childRef = useRef(null);
   const router = useRouter();
