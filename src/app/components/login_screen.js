@@ -20,8 +20,10 @@ const Login = () => {
     console.log(res.message);
 
     if (res.message == "SUCCESS") {
+      try{
       localStorage.setItem("userid", res.users[0].userid);
       localStorage.setItem("userDetails", JSON.stringify(res.users[0]));
+    } catch (error) {}
       redirect("/dashboard");
     } else {
       setShowAlert(true);

@@ -8,14 +8,17 @@ import { useRouter } from "next/navigation";
 export default function TimeAllocation() {
   const [date, setDate] = useState(new Date().toJSON().slice(0, 10));
   const [remark, setRemark] = useState("");
-  const [userid, setUserId] = useState(localStorage.getItem('userid'));
-
+  let userIdTmp = ""
+  try {
+    userIdTmp = localStorage.getItem('userid');
+  } catch (error) { }
+  const [userid, setUserId] = useState(userIdTmp);
   // const childRef = useRef(null);
   const router = useRouter();
   const [tableRowData, setTableRowsData] = useState("");
 
   useEffect(() => {
-    timeAllocFetchApi(date,userid);
+    timeAllocFetchApi(date, userid);
   }, [date]);
 
 
@@ -45,14 +48,14 @@ export default function TimeAllocation() {
     return res;
   }
 
-  function timeAllocFetchApi(selDate,userid) {
+  function timeAllocFetchApi(selDate, userid) {
     const fetchData = async () => {
       const cur_timealloc_details = await fetch(
         "api/timealloc_routers/get_cur_date_details",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ selDate,userid }),
+          body: JSON.stringify({ selDate, userid }),
         }
       );
       const res = await cur_timealloc_details.json();

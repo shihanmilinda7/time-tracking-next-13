@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import Navbar from "@/app/components/navbar";
 import { TimeAllocTable } from "@/app/components/timealloc_table";
 import { useRouter } from "next/navigation";
@@ -11,19 +11,35 @@ import { useEffect, useState } from "react";
 // import { useRouter } from "next/navigation";
 
 export default function TimeAllocation1() {
-    const params = useParams()
-//   const [date, setDate] = useState(new Date().toJSON().slice(0, 10));
+  let pathname;
+
+  try {
+    pathname = window.location.href;
+  }
+  // console.log("pathname", window.location.href,)
+  catch (error) { }
+  const r = pathname.search("time")
+  pathname = pathname.substring(0,r)
+  console.log("pathname",pathname,)
+
+  const params = useParams()
+  //   const [date, setDate] = useState(new Date().toJSON().slice(0, 10));
   const [date, setDate] = useState(params.date);
   const [remark, setRemark] = useState("");
+  let userIdTmp;
+
+  try {
+    userIdTmp = localStorage.getItem('userid');
+  } catch (error) { }
   const [userid, setUserId] = useState(localStorage.getItem('userid'));
 
   // const childRef = useRef(null);
   const router = useRouter();
   const [tableRowData, setTableRowsData] = useState("");
 
-  console.log("params",params,)
+  console.log("params", params,)
   useEffect(() => {
-    timeAllocFetchApi(date,userid);
+    timeAllocFetchApi(date, userid);
     console.log("kkkkkkkkkkkkkkkkkk")
   }, [date]);
 
@@ -31,7 +47,8 @@ export default function TimeAllocation1() {
   const saveEvent = async () => {
     console.log(tableRowData);
     const responseNewTimeAlloc = await fetch(
-      "http://localhost:3000/api/timealloc_routers/save_timealloc_data",
+      pathname +"api/timealloc_routers/save_timealloc_data",
+      // "http://localhost:3000/api/timealloc_routers/save_timealloc_data",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,7 +63,7 @@ export default function TimeAllocation1() {
       // setIsOpen(false);
       console.log(res)
       // router.push("/time_allocation");
-      window.location.href = "/time_allocation/"+date
+      window.location.href = "/time_allocation/" + date
 
     } else {
       router.push("/");
@@ -54,14 +71,15 @@ export default function TimeAllocation1() {
     return res;
   }
 
-  function timeAllocFetchApi(selDate,userid) {
+  function timeAllocFetchApi(selDate, userid) {
     const fetchData = async () => {
       const cur_timealloc_details = await fetch(
-        "http://localhost:3000/api/timealloc_routers/get_cur_date_details",
+        // "http://localhost:3000/api/timealloc_routers/get_cur_date_details",
+        pathname+"api/timealloc_routers/get_cur_date_details",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ selDate,userid }),
+          body: JSON.stringify({ selDate, userid }),
         }
       );
       const res = await cur_timealloc_details.json();

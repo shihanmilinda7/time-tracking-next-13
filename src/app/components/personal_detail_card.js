@@ -1,6 +1,9 @@
 "use client"
 const PersonalDetailCard = () => {
-  const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+  let userDetails;
+  try{
+  userDetails = JSON.parse(localStorage.getItem('userDetails'));
+} catch (error) {}
   return (
     <div className="bg-amber-800 shadow-md rounded-lg overflow-hidden h-96 ">
       <div className="p-4">
